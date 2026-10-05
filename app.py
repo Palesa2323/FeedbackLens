@@ -3,6 +3,7 @@ import streamlit as st
 from analysis import analyze_feedback, calculate_summary
 from visualizations import create_sentiment_chart
 from insights import generate_insights
+from report_analysis import generate_report_insights
 
 #configuring the page layout and title
 st.set_page_config(
@@ -48,6 +49,14 @@ insights = generate_insights(summary)
 for insight in insights:
     st.write(f"- {insight}")
     
+st.subheader("Data Insights Report")
+report_insights = generate_report_insights(
+    summary,
+    results_df)
+
+for insight in report_insights:
+    st.write("•", insight)
+
 st.subheader("Analyzed Feedback")
 
 st.dataframe(
