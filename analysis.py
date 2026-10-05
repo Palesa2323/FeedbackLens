@@ -10,7 +10,7 @@ def analyze_feedback():
     results = []
 
     # Analyze the sentiment of each feedback
-    for feedback in data["Feedback"]:
+    for feedback in data["feedback"]:
         sentiment, score = analyze_sentiment(feedback)
 
         results.append({

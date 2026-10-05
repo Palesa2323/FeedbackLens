@@ -1,6 +1,8 @@
 import streamlit as st
 
 from analysis import analyze_feedback, calculate_summary
+from visualizations import create_sentiment_chart
+
 
 #configuring the page layout and title
 st.set_page_config(
@@ -21,6 +23,9 @@ summary = calculate_summary(results_df)
 
 st.subheader("Sentiment Overview")
 st.metric("Total Feedback", summary["total_reviews"])
+
+fig = create_sentiment_chart(results_df)
+st.pyplot(fig)
 
 col1, col2, col3 = st.columns(3)
 with col1:
