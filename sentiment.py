@@ -1,6 +1,5 @@
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
-from data_loader import load_data
 
 def analyze_sentiment(text):
     #intialization of the SentimentIntensityAnalyzer
