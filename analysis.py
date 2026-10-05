@@ -4,9 +4,9 @@ from data_loader import load_data
 from sentiment import analyze_sentiment
 
 
-def analyze_feedback():
-    data = load_data()
-
+def analyze_feedback(uploaded_file=None):
+    data = load_data(uploaded_file)
+    
     results = []
 
     # Analyze the sentiment of each feedback
@@ -49,3 +49,6 @@ def calculate_summary(results_df):
         "negative_percentage": negative_percentage,
         "neutral_percentage": neutral_percentage
     }
+    
+def get_feedback_by_sentiment(results_df, sentiment):
+    return results_df[results_df["Sentiment"] == sentiment]

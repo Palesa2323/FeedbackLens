@@ -23,7 +23,7 @@ uploaded_file = st.file_uploader(
     type=["csv"]
     )
 
-results_df = analyze_feedback()
+results_df = analyze_feedback(uploaded_file)
 
 summary = calculate_summary(results_df)
 
@@ -53,4 +53,13 @@ st.subheader("Analyzed Feedback")
 st.dataframe(
     results_df,
     use_container_width=True
+)
+
+csv_data = results_df.to_csv(index=False)
+
+st.download_button(
+    label="Download Analyzed Feedback as CSV",
+    data=csv_data,
+    file_name="feedback_analysis.csv",
+    mime="text/csv"
 )
