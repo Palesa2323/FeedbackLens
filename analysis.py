@@ -1,25 +1,10 @@
-import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
 
+from data_loader import load_data
 from sentiment import analyze_sentiment
 
-#configuring the page layout and title
-st.set_page_config(
-    page_title="FeedbackLens - Sentiment Analysis",
-    page_icon=":bar_chart:",
-    layout="wide"
-)
-
-# title of the web application
-st.title("FeedbackLens - Sentiment Analysis") # st = streamlit
-st.subheader("Analyze the sentiment of your feedback data")
-st.write(
-    "Analyze feedback, identify sentiment patterns, and generate useful insights to improve your services. Upload your feedback data in CSV format and let FeedbackLens do the rest!"
-)
-
-def load_data():
-    return pd.read_csv("data/feedback_data.csv")
+def analyze_feedback():
+    data = load_data()
 
 results = [] #analyzing sentiment
 
