@@ -254,7 +254,7 @@ Downloadable Results
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/FeedbackLens.git
+git clone https://github.com/Palesa2323/FeedbackLens.git
 ```
 
 ### 2. Open the project folder
@@ -286,7 +286,7 @@ pip install -r requirements.txt
 ### 6. Run the application
 
 ```bash
-streamlit run app.py
+[streamlit run app.py](https://feedbacklensgit-cwtjn3mhachcsczytlhme2.streamlit.app/) 
 ```
 
 The application will open in your web browser.
