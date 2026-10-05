@@ -3,7 +3,12 @@ import streamlit as st
 from analysis import analyze_feedback, calculate_summary
 from visualizations import create_sentiment_chart
 from insights import generate_insights
-from report_analysis import generate_report_insights
+from report_analysis import (
+    generate_report_insights,
+    generate_recommendations,
+    create_report_data
+)
+from theme import THEMES
 
 #configuring the page layout and title
 st.set_page_config(
@@ -11,7 +16,66 @@ st.set_page_config(
     page_icon=":bar_chart:",
     layout="wide"
 )
+# Theme selection
+theme_name = st.sidebar.selectbox(
+    "Choose a theme",
+    ["Standard Streamlit"] + list(THEMES.keys())
+)
 
+if theme_name == "Standard Streamlit":
+    theme = None
+else:
+    theme = THEMES[theme_name]
+
+# Applying the selected theme
+if theme is not None:
+    st.markdown(
+        f"""
+        <style>
+
+        .stApp {{
+            background-color: {theme["background"]};
+        }}
+
+        .stApp p,
+        .stApp label,
+        .stApp span {{
+            color: {theme["text"]};
+        }}
+
+        [data-testid="stSidebar"] {{
+            background-color: {theme["sidebar"]};
+        }}
+
+        [data-testid="stMetric"] {{
+            background-color: {theme["card"]};
+            border-radius: 16px;
+            padding: 18px;
+            border: 1px solid {theme["accent"]};
+        }}
+
+        h1, h2, h3 {{
+            color: {theme["text"]} !important;
+        }}
+
+        .stButton > button {{
+            background-color: {theme["accent"]};
+            color: white;
+            border: none;
+            border-radius: 10px;
+        }}
+
+        .stDownloadButton > button {{
+            background-color: {theme["accent"]};
+            color: white;
+            border: none;
+            border-radius: 10px;
+        }}
+
+        </style>
+        """,
+        unsafe_allow_html=True
+    ) 
 # title of the web application
 st.title("FeedbackLens - Sentiment Analysis") # st = streamlit
 st.subheader("Analyze the sentiment of your feedback data")
@@ -28,10 +92,14 @@ results_df = analyze_feedback(uploaded_file)
 
 summary = calculate_summary(results_df)
 
+report_data = create_report_data(
+    summary,
+    results_df)   
+
 st.subheader("Sentiment Overview")
 st.metric("Total Feedback", summary["total_reviews"])
 
-fig = create_sentiment_chart(results_df)
+fig = create_sentiment_chart(results_df, theme)
 st.pyplot(fig)
 
 col1, col2, col3 = st.columns(3)
@@ -56,6 +124,12 @@ report_insights = generate_report_insights(
 
 for insight in report_insights:
     st.write("•", insight)
+
+st.subheader("Recommendations")
+recommendations = generate_recommendations(summary, results_df)
+
+for recommendation in recommendations:
+    st.write("•", recommendation)
 
 st.subheader("Analyzed Feedback")
 

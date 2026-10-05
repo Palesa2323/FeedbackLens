@@ -144,3 +144,39 @@ def generate_recommendations(summary, results_df):
         )
 
     return recommendations
+
+def create_report_data(summary, results_df):
+    report_data = {
+        "total_feedback": summary["total_reviews"],
+        "positive_count": summary["positive_count"],
+        "negative_count": summary["negative_count"],
+        "neutral_count": summary["neutral_count"],
+        "positive_percentage": summary["positive_percentage"],
+        "negative_percentage": summary["negative_percentage"],
+        "neutral_percentage": summary["neutral_percentage"],
+        "positive_words": find_common_words(
+            results_df,
+            "Positive",
+            top_n=5
+        ),
+        "negative_words": find_common_words(
+            results_df,
+            "Negative",
+            top_n=5
+        ),
+        "neutral_words": find_common_words(
+            results_df,
+            "Neutral",
+            top_n=5
+        ),
+        "insights": generate_report_insights(
+            summary,
+            results_df
+        ),
+        "recommendations": generate_recommendations(
+            summary,
+            results_df
+        )
+    }
+
+    return report_data
