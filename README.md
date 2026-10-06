@@ -4,7 +4,8 @@
 
 FeedbackLens AI is a Python-based web application that analyzes learner and training feedback using sentiment analysis. The application classifies feedback as **Positive, Neutral, or Negative**, visualizes sentiment patterns, identifies common descriptive terms, and generates insights and recommendations based on the results.
 
-The project was developed as an individual project for **Week 3: AI for Data Analysis & Insights**.
+<img width="1199" height="517" alt="feedbacklens AI 1" src="https://github.com/user-attachments/assets/b607305b-a87a-4793-86fd-45c8d7f5c6c5" />
+
 
 ---
 
@@ -76,6 +77,9 @@ The dashboard provides an overview of the dataset, including:
 - Negative feedback percentage
 - Neutral feedback percentage
 - Sentiment distribution chart
+  
+<img width="1159" height="608" alt="feedbacklens AI 2" src="https://github.com/user-attachments/assets/0ae6e452-fd98-44e9-8431-aeb2b347ceeb" />
+
 
 ---
 
@@ -119,6 +123,8 @@ For example:
 
 This helps turn the analysis into practical actions rather than simply presenting numbers.
 
+<img width="1009" height="446" alt="feedbacklens AI 3" src="https://github.com/user-attachments/assets/d71c68f9-f1bd-4784-8024-224358d690f7" />
+
 ---
 
 ### Custom Themes
@@ -147,6 +153,7 @@ Users can download the analyzed feedback as a CSV file containing:
 
 This allows the analysis to be reused or reviewed outside the application.
 
+<img width="1177" height="525" alt="feedbacklens AI 4" src="https://github.com/user-attachments/assets/a3113e6d-01d2-4467-9707-eee7b4956894" />
 ---
 
 ## Technologies Used
