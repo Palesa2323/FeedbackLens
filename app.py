@@ -19,6 +19,7 @@ from report_analysis import (
     generate_report_insights,
     generate_recommendations,
     create_report_data,
+    find_common_words,
 )
 from theme import THEMES
 
@@ -561,55 +562,297 @@ if page == "Sentiment Analysis":
     )
 
 
+
 # --------------------------------------------------
 # INSIGHTS & RECOMMENDATIONS PAGE
 # --------------------------------------------------
 
+import html
+import pandas as pd
+
 if page == "Insights & Recommendations":
 
-    # QUICK INSIGHTS
+    # ---------- PAGE STYLING ----------
+    st.markdown("""
+        <style>
+        .insight-card {
+            padding: 18px 20px;
+            border-radius: 18px;
+            margin: 8px 0 14px 0;
+            line-height: 1.65;
+            font-size: 14px;
+            box-shadow: 0 4px 14px rgba(101, 80, 120, 0.05);
+        }
+
+        .lavender {
+            background: #F1EAF9;
+            border: 1px solid #DCCBEF;
+            color: #59466F;
+        }
+
+        .blush {
+            background: #FCEBF1;
+            border: 1px solid #F0CBD9;
+            color: #814E63;
+        }
+
+        .cream {
+            background: #FFFDF7;
+            border: 1px solid #EAE0D1;
+            color: #685A68;
+        }
+
+        .butter {
+            background: #FFF5D9;
+            border: 1px solid #F0DDA0;
+            color: #79612E;
+        }
+
+        .insight-number {
+            font-size: 28px;
+            font-weight: 750;
+            margin: 7px 0;
+        }
+
+        .insight-label {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .insight-muted {
+            font-size: 13px;
+            color: #85758F;
+            margin-bottom: 15px;
+        }
+
+        .word-pill {
+            display: inline-block;
+            background: #F1EAF9;
+            color: #655078;
+            border: 1px solid #DCCBEF;
+            border-radius: 24px;
+            padding: 6px 12px;
+            margin: 4px 3px 4px 0;
+            font-size: 12px;
+        }
+
+        .recommendation-card {
+            background: #FFFDFB;
+            border: 1px solid #E5D8EF;
+            border-radius: 18px;
+            padding: 20px;
+            margin: 10px 0 16px 0;
+            box-shadow: 0 4px 14px rgba(101, 80, 120, 0.05);
+        }
+
+        .recommendation-area {
+            color: #655078;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .recommendation-label {
+            color: #8B7A96;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
+    # ---------- QUICK INSIGHTS ----------
     st.divider()
     st.markdown("## Little insights, meaningful changes")
-
     st.write(
         "A quick interpretation of the overall sentiment results."
     )
 
     insights = generate_insights(summary)
 
+    insight_colours = ["lavender", "blush", "butter", "cream"]
+
     if insights:
-        for insight in insights:
-            st.info(f"✦ {insight}")
+        for index, insight in enumerate(insights):
+            colour = insight_colours[index % len(insight_colours)]
+
+            st.markdown(
+                f"""
+                <div class="insight-card {colour}">
+                    <div class="insight-label">QUICK INSIGHT</div>
+                    {html.escape(str(insight))}
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
     else:
         st.info(
-            "No specific insights were triggered by the current "
-            "rules. Review the sentiment distribution for patterns."
+            "No specific insights were triggered by the current rules. "
+            "Review the sentiment distribution for patterns."
         )
 
-    # DATA INSIGHTS REPORT
+    # ---------- DATA INSIGHTS REPORT ----------
     st.divider()
     st.markdown("## Your feedback story")
-
     st.write(
-        "A closer look at the patterns and descriptive words "
-        "found in the feedback."
+        "A closer look at sentiment patterns and descriptive words "
+        "found in your feedback."
     )
 
+    # Sentiment summary bubbles
+    st.markdown("### Sentiment at a glance")
+
+    sentiment_columns = st.columns(3)
+
+    sentiment_cards = [
+        (
+            "Positive",
+            summary["positive_count"],
+            summary["positive_percentage"],
+            "lavender",
+        ),
+        (
+            "Negative",
+            summary["negative_count"],
+            summary["negative_percentage"],
+            "blush",
+        ),
+        (
+            "Neutral",
+            summary["neutral_count"],
+            summary["neutral_percentage"],
+            "butter",
+        ),
+    ]
+
+    for column, (label, count, percentage, colour) in zip(
+        sentiment_columns, sentiment_cards
+    ):
+        with column:
+            st.markdown(
+                f"""
+                <div class="insight-card {colour}">
+                    <div class="insight-label">
+                        {label} sentiment
+                    </div>
+                    <div class="insight-number">
+                        {percentage:.1f}%
+                    </div>
+                    <div>{count:,} responses</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+    # Report insights as colourful cards
     report_insights = generate_report_insights(
         summary,
         results_df,
     )
 
-    if report_insights:
-        for insight in report_insights:
-            st.markdown(f"- {insight}")
-    else:
-        st.write("No additional report insights are available.")
+    st.markdown("### What stands out")
 
-    # RECOMMENDATIONS
+    if report_insights:
+        for index, insight in enumerate(report_insights):
+            colour = insight_colours[index % len(insight_colours)]
+
+            st.markdown(
+                f"""
+                <div class="insight-card {colour}">
+                    {html.escape(str(insight))}
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+    else:
+        st.info("No additional report insights are available.")
+
+    # Word-frequency tables
+    st.markdown("### Words behind the feedback")
+    st.markdown(
+        '<div class="insight-muted">'
+        'Explore frequently occurring words in positive and negative '
+        'comments. Word frequency alone does not confirm the reason '
+        'behind someone’s sentiment.'
+        '</div>',
+        unsafe_allow_html=True,
+    )
+
+    positive_words = find_common_words(
+        results_df,
+        sentiment="Positive",
+        top_n=10,
+    )
+
+    negative_words = find_common_words(
+        results_df,
+        sentiment="Negative",
+        top_n=10,
+    )
+
+    positive_col, negative_col = st.columns(2, gap="large")
+
+    with positive_col:
+        st.markdown("#### Positive feedback")
+
+        if positive_words:
+            positive_df = pd.DataFrame(
+                positive_words,
+                columns=["Word", "Mentions"],
+            )
+
+            st.dataframe(
+                positive_df,
+                hide_index=True,
+                width="stretch",
+            )
+
+            pills = "".join(
+                f'<span class="word-pill">'
+                f'{html.escape(str(word))} · {count}'
+                f'</span>'
+                for word, count in positive_words[:5]
+            )
+
+            st.markdown(pills, unsafe_allow_html=True)
+        else:
+            st.info("No frequent words found in positive feedback.")
+
+    with negative_col:
+        st.markdown("#### Negative feedback")
+
+        if negative_words:
+            negative_df = pd.DataFrame(
+                negative_words,
+                columns=["Word", "Mentions"],
+            )
+
+            st.dataframe(
+                negative_df,
+                hide_index=True,
+                width="stretch",
+            )
+
+            pills = "".join(
+                f'<span class="word-pill">'
+                f'{html.escape(str(word))} · {count}'
+                f'</span>'
+                for word, count in negative_words[:5]
+            )
+
+            st.markdown(pills, unsafe_allow_html=True)
+        else:
+            st.info("No frequent words found in negative feedback.")
+
+    st.caption(
+        "Mentions count word occurrences, not unique people or comments. "
+        "Always review the original feedback before drawing conclusions."
+    )
+
+    # ---------- RECOMMENDATIONS ----------
     st.divider()
     st.markdown("## Ideas for improvement")
-
     st.write(
         "Suggestions based on the sentiment patterns and "
         "descriptive terms identified in your data."
@@ -620,15 +863,51 @@ if page == "Insights & Recommendations":
         results_df,
     )
 
+    priority_colours = {
+        "High": "blush",
+        "Medium": "butter",
+        "Maintain": "lavender",
+        "Monitor": "cream",
+    }
+
     if recommendations:
         for recommendation in recommendations:
-            st.success(f"✿ {recommendation}")
+            area = html.escape(str(recommendation["area"]))
+            priority = html.escape(str(recommendation["priority"]))
+            evidence = html.escape(str(recommendation["evidence"]))
+            action = html.escape(str(recommendation["action"]))
+
+            colour = priority_colours.get(
+                recommendation["priority"],
+                "cream",
+            )
+
+            st.markdown(
+                f"""
+                <div class="recommendation-card">
+                    <div class="recommendation-area">{area}</div>
+                    <div class="insight-card {colour}">
+                        <span class="recommendation-label">
+                            Priority
+                        </span>
+                        <br>{priority}
+                    </div>
+                    <div class="recommendation-label">
+                        What the feedback shows
+                    </div>
+                    <p>{evidence}</p>
+                    <div class="recommendation-label">
+                        Suggested action
+                    </div>
+                    <p>{action}</p>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
     else:
         st.info(
-            "No specific recommendations were triggered by the "
-            "current rules."
+            "There are no recommendations available for this dataset."
         )
-
 
 # --------------------------------------------------
 # FEEDBACK EXPLORER PAGE
