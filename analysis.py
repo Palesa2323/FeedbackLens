@@ -16,7 +16,8 @@ def analyze_feedback(uploaded_file=None):
         results.append({
             "Feedback": feedback,
             "Sentiment": sentiment,
-            "Score": score
+            "Score": score,
+            "compound": score
         })
 
     results_df = pd.DataFrame(results)

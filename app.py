@@ -13,6 +13,7 @@ from visualizations import (
     create_sentiment_comparison,
     create_score_distribution,
 )
+from pdf_report import build_feedback_pdf
 
 from insights import generate_insights
 from report_analysis import (
@@ -931,18 +932,23 @@ if page == "Feedback Explorer":
 
     # DOWNLOAD RESULTS
     st.divider()
-    st.markdown("### Export your analysis")
 
-    csv_data = results_df.to_csv(index=False).encode("utf-8")
-
-    st.download_button(
-        label="Download analyzed feedback",
-        data=csv_data,
-        file_name="feedback_analysis.csv",
-        mime="text/csv",
-        use_container_width=False,
+    st.markdown("### Your complete feedback report")
+    st.write(
+        "Download your detailed feedback analysis, including charts, "
+        "sentiment summaries, word-frequency tables, recommendations, "
+        "and the original feedback."
     )
 
+    pdf_report = build_feedback_pdf(summary, results_df)
+
+    st.download_button(
+        label="Download full feedback report (PDF)",
+        data=pdf_report,
+        file_name="FeedbackLens_Feedback_Report.pdf",
+        mime="application/pdf",
+        width="stretch",
+    )
 
 # --------------------------------------------------
 # FOOTER - SHARED ACROSS ALL PAGES
