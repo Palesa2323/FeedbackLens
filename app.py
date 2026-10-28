@@ -1,3 +1,4 @@
+
 import streamlit as st
 
 from analysis import analyze_feedback, calculate_summary
@@ -6,143 +7,465 @@ from insights import generate_insights
 from report_analysis import (
     generate_report_insights,
     generate_recommendations,
-    create_report_data
+    create_report_data,
 )
 from theme import THEMES
 
-#configuring the page layout and title
+
+# --------------------------------------------------
+# PAGE CONFIGURATION
+# --------------------------------------------------
+
 st.set_page_config(
-    page_title="FeedbackLens - Sentiment Analysis",
-    page_icon=":bar_chart:",
-    layout="wide"
+    page_title="FeedbackLens AI | Sentiment Insights",
+    page_icon="🌸",
+    layout="wide",
 )
-# Theme selection
+
+
+# --------------------------------------------------
+# THEME SELECTION
+# --------------------------------------------------
+
+st.sidebar.image("logo.png", width=150)
+
+st.sidebar.markdown(
+    """
+    <p style="font-size: 13px; opacity: 0.75;">
+        A softer way to understand feedback
+    </p>
+    """,
+    unsafe_allow_html=True,
+)
+
 theme_name = st.sidebar.selectbox(
-    "Choose a theme",
-    ["Standard Streamlit"] + list(THEMES.keys())
+    "Choose your aesthetic",
+    ["Standard Streamlit"] + list(THEMES.keys()),
 )
 
-if theme_name == "Standard Streamlit":
-    theme = None
-else:
-    theme = THEMES[theme_name]
+theme = (
+    None
+    if theme_name == "Standard Streamlit"
+    else THEMES[theme_name]
+)
 
-# Applying the selected theme
+
+# --------------------------------------------------
+# CUSTOM UI STYLING
+# --------------------------------------------------
+
 if theme is not None:
     st.markdown(
         f"""
         <style>
+        @import url(
+            'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap'
+        );
 
         .stApp {{
-            background-color: {theme["background"]};
+            background: {theme["background"]};
+            font-family: 'DM Sans', sans-serif;
         }}
 
-        .stApp p,
-        .stApp label,
-        .stApp span {{
-            color: {theme["text"]};
+        [data-testid="stHeader"] {{
+            background: transparent;
         }}
 
         [data-testid="stSidebar"] {{
-            background-color: {theme["sidebar"]};
+            background: {theme["sidebar"]};
+            border-right: 1px solid {theme["accent"]}44;
         }}
 
-        [data-testid="stMetric"] {{
-            background-color: {theme["card"]};
-            border-radius: 16px;
-            padding: 18px;
-            border: 1px solid {theme["accent"]};
+        [data-testid="stSidebar"] h1,
+        [data-testid="stSidebar"] h2,
+        [data-testid="stSidebar"] p,
+        [data-testid="stSidebar"] label {{
+            color: {theme["text"]};
+        }}
+
+        .block-container {{
+            padding-top: 2.5rem;
+            padding-bottom: 3rem;
+            max-width: 1450px;
         }}
 
         h1, h2, h3 {{
             color: {theme["text"]} !important;
+            font-family: 'Playfair Display', serif !important;
         }}
 
-        .stButton > button {{
-            background-color: {theme["accent"]};
-            color: white;
-            border: none;
-            border-radius: 10px;
+        .stApp p,
+        .stApp label {{
+            color: {theme["text"]};
         }}
 
+        [data-testid="stMetric"] {{
+            background: {theme["card"]};
+            border: 1px solid {theme["accent"]}55;
+            border-radius: 18px;
+            padding: 20px 22px;
+            box-shadow: 0 5px 18px rgba(70, 50, 70, 0.05);
+        }}
+
+        [data-testid="stMetricLabel"] p {{
+            font-size: 0.9rem;
+            font-weight: 600;
+        }}
+
+        [data-testid="stMetricValue"] {{
+            font-weight: 700;
+        }}
+
+        .stButton > button,
         .stDownloadButton > button {{
-            background-color: {theme["accent"]};
+            background: {theme["accent"]};
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
+            padding: 0.55rem 1rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
         }}
 
+        .stButton > button:hover,
+        .stDownloadButton > button:hover {{
+            filter: brightness(0.96);
+            transform: translateY(-1px);
+        }}
+
+        [data-testid="stFileUploader"] {{
+            background: {theme["card"]};
+            border: 1px dashed {theme["accent"]};
+            border-radius: 16px;
+            padding: 12px;
+        }}
+
+        [data-testid="stDataFrame"] {{
+            border: 1px solid {theme["accent"]}55;
+            border-radius: 14px;
+            overflow: hidden;
+        }}
+
+        hr {{
+            border-color: {theme["accent"]}44;
+        }}
         </style>
         """,
-        unsafe_allow_html=True
-    ) 
-# title of the web application
-st.title("FeedbackLens - Sentiment Analysis") # st = streamlit
-st.subheader("Analyze the sentiment of your feedback data")
+        unsafe_allow_html=True,
+    )
+
+
+
+# --------------------------------------------------
+# HEADER
+# --------------------------------------------------
+
+st.markdown(
+    """
+    <style>
+    .feedbacklens-header {
+        background-color: #F7F0FA;
+        padding: 28px;
+        border-radius: 22px;
+        text-align: center;
+        border: 1px solid #E9DDF0;
+    }
+
+    .feedbacklens-header p {
+        color: #75677D;
+        font-size: 16px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    """
+    <div class="feedbacklens-header">
+        <p>✦ AI-POWERED FEEDBACK ANALYSIS</p>
+        <h1>FeedbackLens AI </h1>
+        <p>
+            Turn learner feedback into meaningful insights.
+            Discover sentiment patterns, understand concerns,
+            and find opportunities to improve.
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.divider()
+
+
+
+# --------------------------------------------------
+# DATA UPLOAD
+# --------------------------------------------------
+
+st.subheader("Let's explore your feedback")
+
 st.write(
-    "Analyze feedback, identify sentiment patterns, and generate useful insights to improve your services. Upload your feedback data in CSV format and let FeedbackLens do the rest!"
+    "Upload a CSV file containing a column named `feedback` "
+    "to begin your analysis."
 )
 
 uploaded_file = st.file_uploader(
-    "Upload your feedback CSV file",
-    type=["csv"]
+    "Choose your feedback CSV file",
+    type=["csv"],
+    help="Your CSV must contain a column named feedback.",
+)
+
+
+# --------------------------------------------------
+# SENTIMENT ANALYSIS
+# --------------------------------------------------
+
+try:
+    results_df = analyze_feedback(uploaded_file)
+    summary = calculate_summary(results_df)
+
+except Exception as error:
+    st.error(f"Unable to analyze the feedback: {error}")
+    st.stop()
+
+
+report_data = create_report_data(summary, results_df)
+
+
+# --------------------------------------------------
+# OVERVIEW METRICS
+# --------------------------------------------------
+
+st.markdown(
+    """
+    <style>
+    div[data-testid="stHorizontalBlock"] div[data-testid="stMetric"] {
+        background: linear-gradient(145deg, #FFFFFF, #FFF9FC);
+        border: 1px solid #E9DDF0;
+        border-radius: 20px;
+        padding: 22px;
+        box-shadow: 0 6px 18px rgba(112, 85, 130, 0.07);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    div[data-testid="stHorizontalBlock"] div[data-testid="stMetric"]:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 24px rgba(112, 85, 130, 0.12);
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.markdown("## Your feedback at a glance")
+st.write(
+    "A little snapshot of the feelings behind your feedback."
+)
+
+metric1, metric2, metric3, metric4 = st.columns(4)
+
+with metric1:
+    st.metric(
+        label="✿ Total feedback",
+        value=summary["total_reviews"],
+        help="Total number of feedback entries analyzed.",
     )
 
-results_df = analyze_feedback(uploaded_file)
+with metric2:
+    st.metric(
+        label="🌿 Positive",
+        value=f'{summary["positive_percentage"]:.1f}%',
+        help="Percentage classified as positive.",
+    )
 
-summary = calculate_summary(results_df)
+with metric3:
+    st.metric(
+        label="🌧 Negative",
+        value=f'{summary["negative_percentage"]:.1f}%',
+        help="Percentage classified as negative.",
+    )
 
-report_data = create_report_data(
-    summary,
-    results_df)   
+with metric4:
+    st.metric(
+        label="☁ Neutral",
+        value=f'{summary["neutral_percentage"]:.1f}%',
+        help="Percentage classified as neutral.",
+    )
 
-st.subheader("Sentiment Overview")
-st.metric("Total Feedback", summary["total_reviews"])
 
-fig = create_sentiment_chart(results_df, theme)
-st.pyplot(fig)
+# --------------------------------------------------
+# SENTIMENT CHART
+# --------------------------------------------------
 
-col1, col2, col3 = st.columns(3)
-with col1:
-    st.metric("Positive Feedback", f"{summary['positive_percentage']:.1f}%")
-with col2:
-    st.metric("Negative Feedback", f"{summary['negative_percentage']:.1f}%") 
-with col3:
-    st.metric("Neutral Feedback", f"{summary['neutral_percentage']:.1f}%")
-    
-    
-st.subheader("Insights")
+st.divider()
+st.markdown("## Sentiment distribution")
+
+st.write(
+    "See how positive, negative, and neutral responses "
+    "are distributed across your feedback."
+)
+
+chart_column, chart_info_column = st.columns(
+    [1.7, 1],
+    gap="large",
+)
+
+with chart_column:
+    fig = create_sentiment_chart(results_df, theme)
+    st.pyplot(fig, use_container_width=True)
+
+with chart_info_column:
+    st.markdown("### What the numbers tell us")
+
+    st.write(
+        f'🌿 **Positive:** {summary["positive_count"]} responses'
+    )
+
+    st.write(
+        f'🌧️ **Negative:** {summary["negative_count"]} responses'
+    )
+
+    st.write(
+        f'☁️ **Neutral:** {summary["neutral_count"]} responses'
+    )
+
+    st.caption(
+        "Sentiment labels are generated using VADER sentiment analysis."
+    )
+
+
+# --------------------------------------------------
+# QUICK INSIGHTS
+# --------------------------------------------------
+
+st.divider()
+st.markdown("## Little insights, meaningful changes")
+
+st.write(
+    "A quick interpretation of the overall sentiment results."
+)
+
 insights = generate_insights(summary)
 
-for insight in insights:
-    st.write(f"- {insight}")
-    
-st.subheader("Data Insights Report")
+if insights:
+    for insight in insights:
+        st.info(f"✦ {insight}")
+else:
+    st.info(
+        "No specific insights were triggered by the current "
+        "rules. Review the sentiment distribution for patterns."
+    )
+
+
+# --------------------------------------------------
+# DATA INSIGHTS REPORT
+# --------------------------------------------------
+
+st.divider()
+st.markdown("## Your feedback story")
+
+st.write(
+    "A closer look at the patterns and descriptive words "
+    "found in the feedback."
+)
+
 report_insights = generate_report_insights(
     summary,
-    results_df)
+    results_df,
+)
 
-for insight in report_insights:
-    st.write("•", insight)
+if report_insights:
+    for insight in report_insights:
+        st.markdown(f"- {insight}")
+else:
+    st.write("No additional report insights are available.")
 
-st.subheader("Recommendations")
-recommendations = generate_recommendations(summary, results_df)
 
-for recommendation in recommendations:
-    st.write("•", recommendation)
+# --------------------------------------------------
+# RECOMMENDATIONS
+# --------------------------------------------------
 
-st.subheader("Analyzed Feedback")
+st.divider()
+st.markdown("## Ideas for improvement")
+
+st.write(
+    "Suggestions based on the sentiment patterns and "
+    "descriptive terms identified in your data."
+)
+
+recommendations = generate_recommendations(
+    summary,
+    results_df,
+)
+
+if recommendations:
+    for recommendation in recommendations:
+        st.success(f"✿ {recommendation}")
+else:
+    st.info(
+        "No specific recommendations were triggered by the "
+        "current rules."
+    )
+
+
+# --------------------------------------------------
+# ANALYZED FEEDBACK TABLE
+# --------------------------------------------------
+
+st.divider()
+st.markdown("## Every response, understood")
+
+st.write(
+    "Review the original feedback alongside its sentiment "
+    "classification and compound sentiment score."
+)
 
 st.dataframe(
     results_df,
-    use_container_width=True
+    use_container_width=True,
+    hide_index=True,
 )
 
-csv_data = results_df.to_csv(index=False)
+
+# --------------------------------------------------
+# DOWNLOAD RESULTS
+# --------------------------------------------------
+
+csv_data = results_df.to_csv(index=False).encode("utf-8")
 
 st.download_button(
-    label="Download Analyzed Feedback as CSV",
+    label="↓  Download analyzed feedback",
     data=csv_data,
     file_name="feedback_analysis.csv",
-    mime="text/csv"
+    mime="text/csv",
+    use_container_width=False,
+)
+
+
+# --------------------------------------------------
+# FOOTER
+# --------------------------------------------------
+
+st.divider()
+
+st.markdown(
+    """
+    <div style="
+        text-align: center;
+        padding: 20px 0 10px;
+        opacity: 0.75;
+        font-size: 13px;
+    ">
+        <div style="font-size: 22px; margin-bottom: 8px;">🌷</div>
+        <strong>FeedbackLens AI</strong>
+        <p style="margin: 5px 0;">
+            Thoughtful insights for better learning experiences.
+        </p>
+        <p style="font-size: 11px;">
+            Built with Python, Streamlit, Pandas, VADER and Matplotlib.
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
