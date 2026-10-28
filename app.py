@@ -931,24 +931,24 @@ if page == "Feedback Explorer":
     )
 
     # DOWNLOAD RESULTS
-    st.divider()
+st.divider()
 
-    st.markdown("### Your complete feedback report")
-    st.write(
-        "Download your detailed feedback analysis, including charts, "
-        "sentiment summaries, word-frequency tables, recommendations, "
-        "and the original feedback."
-    )
+st.markdown("### Your complete feedback report")
+st.write(
+    "Download your detailed feedback analysis, including charts, "
+    "sentiment summaries, word-frequency tables, recommendations, "
+    "and the original feedback."
+)
 
-    pdf_report = build_feedback_pdf(summary, results_df)
+pdf_report = build_feedback_pdf(summary, results_df)
 
-    st.download_button(
-        label="Download full feedback report (PDF)",
-        data=pdf_report,
-        file_name="FeedbackLens_Feedback_Report.pdf",
-        mime="application/pdf",
-        width="stretch",
-    )
+st.download_button(
+    label="Download full feedback report (PDF)",
+    data=pdf_report,
+    file_name="FeedbackLens_Feedback_Report.pdf",
+    mime="application/pdf",
+    width="stretch",
+)
 
 # --------------------------------------------------
 # FOOTER - SHARED ACROSS ALL PAGES
@@ -956,23 +956,20 @@ if page == "Feedback Explorer":
 
 st.divider()
 
+import streamlit as st
+from pathlib import Path
+
+logo_path = Path(__file__).parent / "logo.png"
+
+if logo_path.exists():
+    st.image(str(logo_path), width=90)
+
 st.markdown(
     """
-    <div style="
-        text-align: center;
-        padding: 20px 0 10px;
-        opacity: 0.75;
-        font-size: 13px;
-    ">
-        <div style="font-size: 22px; margin-bottom: 8px;">🌷</div>
-        <strong>FeedbackLens AI</strong>
-        <p style="margin: 5px 0;">
-            Turning feedback into clearer insights and better decisions.
-        </p>
-        <p style="font-size: 11px;">
-            Built with Python, Streamlit, Pandas, VADER and Matplotlib.
-        </p>
+    <div style="text-align: center; color: #8C789E; padding: 10px;">
+        <strong>FeedbackLens AI</strong><br>
+        Made by Palesa Gaetsewe
     </div>
     """,
-    unsafe_allow_html=True,
+    unsafe_allow_html=True
 )
