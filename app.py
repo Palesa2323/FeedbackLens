@@ -23,7 +23,8 @@ from report_analysis import (
     find_common_words,
 )
 from theme import THEMES
-
+from feedy import get_feedy_response
+from feedy_page import render_feedy_page
 
 def load_feedback_file(uploaded_file):
     """Read supported file formats into a Pandas DataFrame."""
@@ -160,6 +161,7 @@ page = st.sidebar.radio(
         "Sentiment Analysis",
         "Insights & Recommendations",
         "Feedback Explorer",
+        "Ask Feedy (AI Assistant)",
     ],
     label_visibility="collapsed",
 )
@@ -314,27 +316,30 @@ st.divider()
 
 
 
+
 # --------------------------------------------------
-# DATA UPLOAD
+# DATA UPLOAD - SENTIMENT ANALYSIS PAGE ONLY
 # --------------------------------------------------
 
-st.subheader("Let's explore your feedback")
+uploaded_file = None
 
-st.write(
-    "Upload a CSV file containing a column named `feedback` "
-    "to begin your analysis."
-)
+if page == "Sentiment Analysis":
+    st.subheader("Let's explore your feedback")
 
+    st.write(
+        "Upload a file containing a column named `feedback` "
+        "to begin your analysis."
+    )
 
-uploaded_file = st.file_uploader(
-    "Upload your feedback",
-    type=["csv", "xlsx", "xls", "txt", "docx"],
-    help=(
-        "Supported formats: CSV, Excel, TXT, and Word DOCX. "
-        "CSV and Excel files must contain a 'feedback' column."
-    ),
-)
-
+    uploaded_file = st.file_uploader(
+        "Upload your feedback",
+        type=["csv", "xlsx", "xls", "txt", "docx"],
+        help=(
+            "Supported formats: CSV, Excel, TXT, and Word DOCX. "
+            "CSV and Excel files must contain a 'feedback' column."
+        ),
+        key="sentiment_feedback_upload",
+    )
 
 
 # --------------------------------------------------
@@ -930,25 +935,32 @@ if page == "Feedback Explorer":
         hide_index=True,
     )
 
-    # DOWNLOAD RESULTS
-st.divider()
+   
+    # DOWNLOAD RESULTS - FEEDBACK EXPLORER ONLY
+    st.divider()
 
-st.markdown("### Your complete feedback report")
-st.write(
-    "Download your detailed feedback analysis, including charts, "
-    "sentiment summaries, word-frequency tables, recommendations, "
-    "and the original feedback."
-)
+    st.markdown("### Your complete feedback report")
+    st.write(
+        "Download your detailed feedback analysis, including charts, "
+        "sentiment summaries, word-frequency tables, recommendations, "
+        "and the original feedback."
+    )
 
-pdf_report = build_feedback_pdf(summary, results_df)
+    pdf_report = build_feedback_pdf(summary, results_df)
 
-st.download_button(
-    label="Download full feedback report (PDF)",
-    data=pdf_report,
-    file_name="FeedbackLens_Feedback_Report.pdf",
-    mime="application/pdf",
-    width="stretch",
-)
+    st.download_button(
+        label="Download full feedback report (PDF)",
+        data=pdf_report,
+        file_name="FeedbackLens_Feedback_Report.pdf",
+        mime="application/pdf",
+        width="stretch",
+    )
+# --------------------------------------------------
+# FEEDY CHAT PAGE
+# --------------------------------------------------
+
+if page == "Ask Feedy (AI Assistant)":
+    render_feedy_page(results_df, summary)
 
 # --------------------------------------------------
 # FOOTER - SHARED ACROSS ALL PAGES
@@ -973,3 +985,4 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+

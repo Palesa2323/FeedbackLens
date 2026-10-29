@@ -4,3 +4,4 @@ matplotlib
 vaderSentiment
 python-docx
 reportlab
+google-genai
