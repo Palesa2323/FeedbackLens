@@ -51,14 +51,17 @@ USER QUESTION:
 """
 
         response = client.models.generate_content(
-            model="gemini-2.5-flash",
+            model="gemini-3.8-flash",
             contents=prompt,
         )
 
         return response.text or "I couldn't generate a response. Please try again."
 
-    except Exception:
+
+
+    except Exception as error:
+        print(f"FEEDY DEBUG ERROR: {type(error).__name__}: {error}")
         return (
-            "I couldn't connect to the AI service just now. "
-            "Please check your API key and connection, then try again."
+            f"Feedy error: {type(error).__name__}: {error}"
         )
+

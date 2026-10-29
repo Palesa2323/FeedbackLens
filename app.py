@@ -85,12 +85,15 @@ theme_name = st.sidebar.selectbox(
     ["Standard Streamlit"] + list(THEMES.keys()),
 )
 
-theme = (
+style_theme = (
     None
     if theme_name == "Standard Streamlit"
     else THEMES[theme_name]
 )
 
+# Use the first available palette as a fallback for styling.
+# The Standard Streamlit option remains available.
+style_theme = style_theme if style_theme is not None else THEMES["Pastel Bloom"]
 
 # --------------------------------------------------
 # SIDEBAR NAVIGATION
@@ -169,110 +172,123 @@ page = st.sidebar.radio(
 st.sidebar.divider()
 
 
+# 
 # --------------------------------------------------
 # CUSTOM UI STYLING
 # --------------------------------------------------
 
-if theme is not None:
-    st.markdown(
-        f"""
-        <style>
-        @import url(
-            'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap'
+st.markdown(
+    f"""
+    <style>
+    @import url(
+        'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap'
+    );
+
+    .stApp {{
+        background: {style_theme["background"]};
+        font-family: 'DM Sans', sans-serif;
+    }}
+
+    [data-testid="stHeader"] {{
+        background: {style_theme["header"]};
+    }}
+
+    [data-testid="stSidebar"] {{
+        background: linear-gradient(
+            180deg,
+            {style_theme["sidebar"]},
+            {style_theme["background"]}
         );
+        border-right: 1px solid {style_theme["border"]};
+    }}
 
-        .stApp {{
-            background: {theme["background"]};
-            font-family: 'DM Sans', sans-serif;
-        }}
+    [data-testid="stSidebar"] h1,
+    [data-testid="stSidebar"] h2,
+    [data-testid="stSidebar"] h3,
+    [data-testid="stSidebar"] p,
+    [data-testid="stSidebar"] label {{
+        color: {style_theme["text"]};
+    }}
 
-        [data-testid="stHeader"] {{
-            background: transparent;
-        }}
+    .block-container {{
+        padding-top: 2.5rem;
+        padding-bottom: 3rem;
+        max-width: 1450px;
+    }}
 
-        [data-testid="stSidebar"] {{
-            background: {theme["sidebar"]};
-            border-right: 1px solid {theme["accent"]}44;
-        }}
+    h1, h2, h3 {{
+        color: {style_theme["text"]} !important;
+        font-family: 'Playfair Display', serif !important;
+    }}
 
-        [data-testid="stSidebar"] h1,
-        [data-testid="stSidebar"] h2,
-        [data-testid="stSidebar"] p,
-        [data-testid="stSidebar"] label {{
-            color: {theme["text"]};
-        }}
+    .stApp p,
+    .stApp label {{
+        color: {style_theme["text"]};
+    }}
 
-        .block-container {{
-            padding-top: 2.5rem;
-            padding-bottom: 3rem;
-            max-width: 1450px;
-        }}
+    [data-testid="stMetric"] {{
+        background: {style_theme["card"]};
+        border: 1px solid {style_theme["border"]};
+        border-radius: 18px;
+        padding: 20px 22px;
+        box-shadow: 0 5px 18px rgba(70, 50, 70, 0.05);
+        transition: all 0.2s ease;
+    }}
 
-        h1, h2, h3 {{
-            color: {theme["text"]} !important;
-            font-family: 'Playfair Display', serif !important;
-        }}
+    [data-testid="stMetric"]:hover {{
+        border-color: {style_theme["accent"]};
+        transform: translateY(-2px);
+    }}
 
-        .stApp p,
-        .stApp label {{
-            color: {theme["text"]};
-        }}
+    [data-testid="stMetricLabel"] {{
+        color: {style_theme["muted_text"]};
+    }}
 
-        [data-testid="stMetric"] {{
-            background: {theme["card"]};
-            border: 1px solid {theme["accent"]}55;
-            border-radius: 18px;
-            padding: 20px 22px;
-            box-shadow: 0 5px 18px rgba(70, 50, 70, 0.05);
-        }}
+    [data-testid="stMetricValue"] {{
+        color: {style_theme["text"]};
+        font-weight: 700;
+    }}
 
-        [data-testid="stMetricLabel"] p {{
-            font-size: 0.9rem;
-            font-weight: 600;
-        }}
+    .stButton > button,
+    .stDownloadButton > button {{
+        background: {style_theme["accent"]};
+        color: {style_theme["button_text"]};
+        border: 1px solid {style_theme["accent"]};
+        border-radius: 12px;
+        padding: 0.55rem 1rem;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }}
 
-        [data-testid="stMetricValue"] {{
-            font-weight: 700;
-        }}
+    .stButton > button:hover,
+    .stDownloadButton > button:hover {{
+        background: {style_theme["hover"]};
+        color: {style_theme["text"]};
+        border-color: {style_theme["accent"]};
+        transform: translateY(-1px);
+    }}
 
-        .stButton > button,
-        .stDownloadButton > button {{
-            background: {theme["accent"]};
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 0.55rem 1rem;
-            font-weight: 600;
-            transition: all 0.2s ease;
-        }}
+    [data-testid="stFileUploader"] {{
+        background: {style_theme["card"]};
+        border: 1px dashed {style_theme["accent"]};
+        border-radius: 16px;
+        padding: 12px;
+    }}
 
-        .stButton > button:hover,
-        .stDownloadButton > button:hover {{
-            filter: brightness(0.96);
-            transform: translateY(-1px);
-        }}
+    [data-testid="stDataFrame"] {{
+        border: 1px solid {style_theme["border"]};
+        border-radius: 14px;
+        overflow: hidden;
+    }}
 
-        [data-testid="stFileUploader"] {{
-            background: {theme["card"]};
-            border: 1px dashed {theme["accent"]};
-            border-radius: 16px;
-            padding: 12px;
-        }}
+    hr {{
+        border-color: {style_theme["border"]};
+    }}
 
-        [data-testid="stDataFrame"] {{
-            border: 1px solid {theme["accent"]}55;
-            border-radius: 14px;
-            overflow: hidden;
-        }}
-
-        hr {{
-            border-color: {theme["accent"]}44;
-        }}
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
-
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 
 
 # --------------------------------------------------
@@ -321,6 +337,13 @@ st.divider()
 # DATA UPLOAD - SENTIMENT ANALYSIS PAGE ONLY
 # --------------------------------------------------
 
+# Initialise saved analysis state
+if "results_df" not in st.session_state:
+    st.session_state.results_df = None
+
+if "summary" not in st.session_state:
+    st.session_state.summary = None
+
 uploaded_file = None
 
 if page == "Sentiment Analysis":
@@ -341,21 +364,29 @@ if page == "Sentiment Analysis":
         key="sentiment_feedback_upload",
     )
 
+    # Analyse only when a new file is uploaded
+    if uploaded_file is not None:
+        try:
+            results_df = analyze_feedback(uploaded_file)
+            summary = calculate_summary(results_df)
 
-# --------------------------------------------------
-# SENTIMENT ANALYSIS
-# --------------------------------------------------
+            st.session_state.results_df = results_df
+            st.session_state.summary = summary
 
-try:
-    results_df = analyze_feedback(uploaded_file)
-    summary = calculate_summary(results_df)
+        except Exception as error:
+            st.error(f"Unable to analyze the feedback: {error}")
+            st.stop()
 
-except Exception as error:
-    st.error(f"Unable to analyze the feedback: {error}")
+# Reuse the saved analysis on every page
+results_df = st.session_state.results_df
+summary = st.session_state.summary
+
+if results_df is None or summary is None:
+    st.info("Please upload a feedback file in Sentiment Analysis to begin.")
     st.stop()
 
-
 report_data = create_report_data(summary, results_df)
+
 
 
 # --------------------------------------------------
@@ -363,91 +394,89 @@ report_data = create_report_data(summary, results_df)
 # --------------------------------------------------
 
 st.markdown(
-    """
+    f"""
     <style>
-    /* Soft sidebar background */
-    [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #FBF7FC 0%, #F4EDF9 100%);
-        border-right: 1px solid #E5D9ED;
-    }
+    /* Main sidebar */
+    [data-testid="stSidebar"] {{
+        background: linear-gradient(
+            180deg,
+            {style_theme["sidebar"]} 0%,
+            {style_theme["background"]} 100%
+        );
+        border-right: 1px solid {style_theme["border"]};
+    }}
 
-    [data-testid="stSidebar"] > div:first-child {
+    [data-testid="stSidebar"] > div:first-child {{
         padding-top: 2rem;
-    }
-    
-    /* Rounded metric cards */
-    [data-testid="stMetric"] {
-        background: #FFFCFF;
-        border: 1px solid #E5D8EF;
+    }}
+
+    /* Metric cards */
+    [data-testid="stMetric"] {{
+        background: {style_theme["card"]};
+        border: 1px solid {style_theme["border"]};
         border-radius: 16px;
         padding: 20px 18px;
-        box-shadow: 0 3px 12px rgba(117, 86, 143, 0.06);
+        box-shadow: 0 3px 12px rgba(80, 70, 90, 0.06);
         transition: all 0.2s ease;
-    }
+    }}
 
-    /* Gentle hover effect */
-    [data-testid="stMetric"]:hover {
-        border-color: #C9B0DD;
-        box-shadow: 0 5px 16px rgba(117, 86, 143, 0.12);
+    [data-testid="stMetric"]:hover {{
+        border-color: {style_theme["accent"]};
+        box-shadow: 0 5px 16px rgba(80, 70, 90, 0.12);
         transform: translateY(-2px);
-    }
+    }}
 
-    /* Metric labels */
-    [data-testid="stMetricLabel"] {
-        color: #756580;
+    [data-testid="stMetricLabel"] {{
+        color: {style_theme["muted_text"]};
         font-size: 14px;
-    }
+    }}
 
-    /* Metric values */
-    [data-testid="stMetricValue"] {
-        color: #655078;
+    [data-testid="stMetricValue"] {{
+        color: {style_theme["text"]};
         font-weight: 700;
-    }
+    }}
 
-
-    /* Navigation heading */
-    [data-testid="stSidebar"] h3 {
-        color: #655078;
+    /* Sidebar navigation heading */
+    [data-testid="stSidebar"] h3 {{
+        color: {style_theme["text"]};
         font-size: 18px;
         font-weight: 700;
         padding: 10px 12px;
         margin-bottom: 12px;
-    }
+    }}
 
-    /* Space between navigation items */
-    [data-testid="stSidebar"] [data-testid="stRadio"] > div {
+    /* Navigation spacing */
+    [data-testid="stSidebar"] [data-testid="stRadio"] > div {{
         gap: 10px;
-    }
+    }}
 
-    /* Boxed navigation items */
-    [data-testid="stSidebar"] [data-testid="stRadio"] label {
-        background: #FFFCFF;
-        border: 1px solid #E5D8EF;
+    /* Navigation items */
+    [data-testid="stSidebar"] [data-testid="stRadio"] label {{
+        background: {style_theme["card"]};
+        border: 1px solid {style_theme["border"]};
         border-radius: 13px;
         padding: 13px 14px;
-        color: #756580;
+        color: {style_theme["text"]};
         font-size: 14px;
         font-weight: 500;
         transition: all 0.2s ease;
-    }
+    }}
 
-    /* Hover effect */
-    [data-testid="stSidebar"] [data-testid="stRadio"] label:hover {
-        background: #F0E5F7;
-        border-color: #C9B0DD;
-        color: #5E4675;
-    }
+    [data-testid="stSidebar"] [data-testid="stRadio"] label:hover {{
+        background: {style_theme["hover"]};
+        border-color: {style_theme["accent"]};
+        color: {style_theme["text"]};
+    }}
 
-    /* Divider */
-    [data-testid="stSidebar"] hr {
-        border-color: #E5D9ED;
+    /* Sidebar divider */
+    [data-testid="stSidebar"] hr {{
+        border-color: {style_theme["border"]};
         margin: 18px 0;
-    }
+    }}
     </style>
     """,
     unsafe_allow_html=True,
 )
-
 
 if page == "Overview":
 
@@ -537,13 +566,13 @@ if page == "Sentiment Analysis":
 
     with chart_left:
         st.pyplot(
-            create_sentiment_donut(results_df, theme),
+            create_sentiment_donut(results_df, style_theme),
             use_container_width=True,
         )
 
     with chart_right:
         st.pyplot(
-            create_sentiment_comparison(results_df, theme),
+            create_sentiment_comparison(results_df, style_theme),
             use_container_width=True,
         )
 
