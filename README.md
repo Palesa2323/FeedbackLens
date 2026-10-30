@@ -49,7 +49,7 @@ Each response is classified into one of three categories:
 
 The application also retains the compound sentiment score for each response.
 
-<img width="1514" height="756" alt="Sentiment Analysis" src="https://github.com/user-attachments/assets/a6040b3b-8416-4e6d-8d48-9c6a40706b09" />
+
 
 ---
 
