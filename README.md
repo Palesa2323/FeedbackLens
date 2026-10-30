@@ -1,159 +1,177 @@
-# FeedbackLens AI
+# FeedbackLens AI 2.0
 
 ### AI-Powered Feedback Sentiment Analysis & Insights
 
-FeedbackLens AI is a Python-based web application that analyzes learner and training feedback using sentiment analysis. The application classifies feedback as **Positive, Neutral, or Negative**, visualizes sentiment patterns, identifies common descriptive terms, and generates insights and recommendations based on the results.
+FeedbackLens AI is a Python-based web application that helps organisations and training programmes understand learner feedback through sentiment analysis, data visualisation and AI-assisted insights.
 
-<img width="1199" height="517" alt="feedbacklens AI 1" src="https://github.com/user-attachments/assets/b607305b-a87a-4793-86fd-45c8d7f5c6c5" />
+The application classifies feedback as **Positive, Neutral or Negative**, identifies recurring descriptive terms, highlights patterns and generates recommendations to support informed decision-making.
 
+It also includes **Feedy**, an AI-powered assistant that allows users to ask questions about their analysed feedback dataset.
+
+**Live Demo:** https://feedbacklensgit-cwtjn3mhachcsczytlhme2.streamlit.app/
 
 ---
 
 ## Project Overview
 
-Organizations and training programmes collect large amounts of feedback, but manually reviewing every response can be time-consuming.
+Organisations and training programmes collect large amounts of feedback, but manually reviewing every response can be time-consuming.
 
-FeedbackLens AI provides a simple way to turn feedback data into meaningful information.
+FeedbackLens AI provides an interactive way to transform unstructured feedback into meaningful information.
 
-Users can upload a CSV file containing feedback, and the application automatically:
+Users can upload a feedback dataset, and the application automatically:
 
-- Analyzes the sentiment of each feedback response
-- Classifies responses as Positive, Neutral, or Negative
-- Calculates sentiment percentages
-- Visualizes the sentiment distribution
-- Identifies common descriptive terms
-- Generates key insights
-- Provides recommendations for improvement
-- Displays the analyzed feedback
-- Allows users to download the analysis as a CSV file
+- Analyses individual feedback responses.
+- Classifies responses as Positive, Neutral or Negative.
+- Calculates sentiment scores and percentages.
+- Displays sentiment patterns through visualisations.
+- Identifies common descriptive terms.
+- Generates key insights.
+- Provides recommendations for improvement.
+- Allows users to explore individual feedback responses.
+- Offers an AI assistant for questions about the dataset.
+- Supports downloadable analysis results.
 
 ---
 
 ## Key Features
 
-### CSV Feedback Upload
+### 1. Sentiment Analysis
 
-Users can upload their own feedback dataset in CSV format.
-
-The CSV file should contain a column named:
-
-```text
-feedback
-```
-
-Example:
-
-```csv
-id,feedback
-1,"The training was excellent and informative."
-2,"The instructions were confusing."
-3,"The course was okay."
-```
-
----
-
-### Sentiment Analysis
-
-FeedbackLens uses **VADER Sentiment Analysis** to calculate sentiment scores for each feedback response.
+FeedbackLens uses **VADER Sentiment Analysis** to calculate sentiment scores for individual feedback responses.
 
 Each response is classified into one of three categories:
 
 | Sentiment | Description |
 |---|---|
 | Positive | Indicates favourable or positive feedback |
-| Neutral | Indicates a mixed or moderate response |
+| Neutral | Indicates a moderate or mixed response |
 | Negative | Indicates dissatisfaction or concerns |
 
-The application also stores the sentiment compound score for each response.
+The application also retains the compound sentiment score for each response.
+
+<img width="1514" height="756" alt="Sentiment Analysis" src="https://github.com/user-attachments/assets/a6040b3b-8416-4e6d-8d48-9c6a40706b09" />
 
 ---
 
-### Sentiment Dashboard
+### 2. Sentiment Dashboard
 
-The dashboard provides an overview of the dataset, including:
+The dashboard provides an overview of the analysed feedback dataset, including:
 
-- Total feedback responses
-- Positive feedback percentage
-- Negative feedback percentage
-- Neutral feedback percentage
-- Sentiment distribution chart
-  
-<img width="1159" height="608" alt="feedbacklens AI 2" src="https://github.com/user-attachments/assets/0ae6e452-fd98-44e9-8431-aeb2b347ceeb" />
+- Total feedback responses.
+- Positive feedback percentage.
+- Negative feedback percentage.
+- Neutral feedback percentage.
+- Sentiment distribution visualisations.
 
+<img width="1514" height="756" alt="Sentiment Dashboard" src="https://github.com/user-attachments/assets/cb5de24c-639a-4447-b83b-3620bbe9df99" />
 
 ---
 
-### Data Insights
+### 3. Data Insights
 
-FeedbackLens goes beyond simply displaying sentiment percentages.
+FeedbackLens goes beyond displaying sentiment percentages by identifying descriptive terms that appear in feedback responses.
 
-The application identifies descriptive terms within feedback to help highlight areas that learners frequently mention.
-
-For example:
+Examples include:
 
 **Positive terms**
-
-- excellent
-- helpful
-- useful
-- clear
-- practical
-- engaging
+- Excellent
+- Helpful
+- Useful
+- Clear
+- Practical
+- Engaging
 
 **Negative terms**
+- Confusing
+- Boring
+- Difficult
+- Frustrating
+- Long
+- Technical
 
-- confusing
-- boring
-- difficult
-- frustrating
-- long
-- technical
+These terms help highlight recurring experiences and areas that may require attention.
+
+<img width="1260" height="623" alt="Data Insights" src="https://github.com/user-attachments/assets/9727a191-52f5-4a9a-ba47-06c4b6d3e623" />
 
 ---
 
-### Recommendations
+### 4. Recommendations
 
-The application generates recommendations based on patterns found in the feedback.
+The application generates recommendations based on patterns identified in the feedback.
 
 For example:
 
-> Increase learner engagement by adding more interactive activities and practical exercises.
+> Increase learner engagement by introducing more interactive activities and practical exercises.
 
-> Review difficult or confusing topics and provide clearer instructions, explanations, and examples.
+> Review difficult or confusing topics and provide clearer instructions, explanations and examples.
 
-This helps turn the analysis into practical actions rather than simply presenting numbers.
+The purpose is to turn the analysis into practical suggestions rather than simply presenting statistics.
 
-<img width="1009" height="446" alt="feedbacklens AI 3" src="https://github.com/user-attachments/assets/d71c68f9-f1bd-4784-8024-224358d690f7" />
+<img width="1494" height="658" alt="Recommendations" src="https://github.com/user-attachments/assets/14e0d1aa-932e-468f-b1b2-7742d6c8d04f" />
 
 ---
 
-### Custom Themes
+### 5. Feedy AI Assistant
 
-FeedbackLens includes selectable interface themes.
+FeedbackLens includes **Feedy**, an AI-powered assistant that allows users to interact with their analysed feedback dataset.
+
+Users can ask questions about their results and receive responses based on the available feedback and sentiment analysis.
+
+Examples include:
+
+- What should we improve first?
+- What are people unhappy about?
+- What are people praising?
+- What patterns can you identify in the feedback?
+
+Feedy uses Google's Gemini API to generate responses, making it easier to explore feedback without manually reviewing every response.
+
+<img width="1515" height="540" alt="8" src="https://github.com/user-attachments/assets/550a94d1-683f-462e-9e3f-2bd8bc437015" />
+
+---
+
+### 6. Customisable Themes
+
+FeedbackLens includes selectable interface themes designed to provide a more personalised dashboard experience.
 
 Available themes include:
 
-- Standard Streamlit
-- Pastel Bloom
-- Lavender
-- Soft Cream
-- Pastel Blue
+- **Standard Streamlit:** The default Streamlit appearance.
+- **Pastel Bloom:** Soft blush and warm pastel colours.
+- **Lavender:** A combination of lavender, lilac and cream.
+- **Soft Cream:** Warm ivory, butter and neutral tones.
+- **Pastel Blue:** Soft blue, cream and complementary pastel accents.
 
-The **Standard Streamlit** theme is used by default, while the pastel themes allow users to personalize the dashboard appearance.
+The custom themes coordinate the application's sidebar, header, cards, navigation and visual elements.
 
 ---
 
-### Download Results
+### 7. Feedback Explorer and Downloads
 
-Users can download the analyzed feedback as a CSV file containing:
+Users can explore analysed feedback and review individual responses alongside their sentiment classifications.
+
+The application also supports downloading analysed feedback as a CSV file containing:
 
 - Feedback
 - Sentiment
 - Sentiment Score
 
-This allows the analysis to be reused or reviewed outside the application.
+This allows users to review and reuse their results outside the application.
 
-<img width="1177" height="525" alt="feedbacklens AI 4" src="https://github.com/user-attachments/assets/a3113e6d-01d2-4467-9707-eee7b4956894" />
+<img width="1549" height="693" alt="Download Results" src="https://github.com/user-attachments/assets/2a196f1a-a771-44e5-a502-9f20080bea72" />
+
+---
+
+## Application Pages
+
+| Page | Purpose |
+|---|---|
+| Overview | Displays a summary of the analysed feedback |
+| Sentiment Analysis | Uploads and analyses feedback data |
+| Insights & Recommendations | Presents findings and suggested improvements |
+| Feedback Explorer | Allows users to explore individual responses |
+| Ask Feedy | Provides an AI assistant for questions about the dataset |
+
 ---
 
 ## Technologies Used
@@ -161,219 +179,107 @@ This allows the analysis to be reused or reviewed outside the application.
 | Technology | Purpose |
 |---|---|
 | Python | Main programming language |
-| Streamlit | Web application and dashboard |
+| Streamlit | Web application and interactive dashboard |
 | Pandas | Data loading and processing |
 | VADER | Sentiment analysis |
-| Matplotlib | Data visualization |
-| CSV | Feedback data storage |
+| Matplotlib | Data visualisation |
+| Google Gemini API | AI-assisted responses through Feedy |
+| HTML & CSS | Custom interface styling |
+| CSV | Feedback data input and result export |
 | GitHub | Version control and project documentation |
-
----
-
-## Project Structure
-
-```text
-FeedbackLens/
-│
-├── app.py
-├── analysis.py
-├── sentiment.py
-├── data_loader.py
-├── visualizations.py
-├── insights.py
-├── report_analysis.py
-├── theme.py
-│
-├── data/
-│   └── feedback.csv
-│
-├── requirements.txt
-├── .gitignore
-└── README.md
-```
-
-### File Responsibilities
-
-**`app.py`**
-
-Controls the Streamlit interface and brings the different components of the application together.
-
-**`data_loader.py`**
-
-Loads feedback data from the default CSV file or an uploaded CSV file.
-
-**`sentiment.py`**
-
-Performs sentiment analysis using VADER.
-
-**`analysis.py`**
-
-Processes the feedback and calculates sentiment statistics.
-
-**`visualizations.py`**
-
-Creates the sentiment distribution chart.
-
-**`insights.py`**
-
-Generates basic insights from the sentiment summary.
-
-**`report_analysis.py`**
-
-Performs additional feedback analysis and generates insights, descriptive terms, and recommendations.
-
-**`theme.py`**
-
-Contains the colour definitions used by the application's customizable themes.
+| Streamlit Community Cloud | Application deployment |
 
 ---
 
 ## How It Works
 
-The application follows this basic workflow:
+The application follows this general workflow:
 
 ```text
-CSV Feedback
-     ↓
+Feedback Dataset
+       ↓
 Data Loading
-     ↓
+       ↓
 Sentiment Analysis
-     ↓
+       ↓
 Positive / Neutral / Negative Classification
-     ↓
+       ↓
 Sentiment Statistics
-     ↓
-Data Visualization
-     ↓
+       ↓
+Data Visualisation
+       ↓
 Descriptive Term Analysis
-     ↓
+       ↓
 Insights
-     ↓
+       ↓
 Recommendations
-     ↓
-Downloadable Results
-```
-
----
-
-## Installation
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/Palesa2323/FeedbackLens.git
-```
-
-### 2. Open the project folder
-
-```bash
-cd FeedbackLens
-```
-
-### 3. Create a virtual environment
-
-```bash
-python -m venv .venv
-```
-
-### 4. Activate the virtual environment
-
-On Windows:
-
-```bash
-.venv\Scripts\activate
-```
-
-### 5. Install dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### 6. Run the application
-
-```bash
-[streamlit run app.py](https://feedbacklensgit-cwtjn3mhachcsczytlhme2.streamlit.app/) 
-```
-
-The application will open in your web browser.
-
----
-
-## Dataset Requirements
-
-FeedbackLens expects a CSV file containing a column named:
-
-```text
-feedback
-```
-
-Additional columns can be included, but the `feedback` column is required for sentiment analysis.
-
-Example:
-
-```csv
-id,feedback
-1,"The training was excellent and very informative."
-2,"The instructor explained everything clearly."
-3,"The instructions were confusing."
+       ↓
+Feedback Exploration & Downloads
+       ↓
+AI-Assisted Questions with Feedy
 ```
 
 ---
 
 ## Technical Approach
 
-FeedbackLens uses **VADER (Valence Aware Dictionary and sEntiment Reasoner)** to calculate sentiment scores.
+### Sentiment Classification
 
-The compound sentiment score is used to classify each response:
+FeedbackLens uses VADER to calculate sentiment scores.
+
+The compound score determines the sentiment category:
 
 ```text
-Score >= 0.05
+Compound Score >= 0.05
     → Positive
 
-Score <= -0.05
+Compound Score <= -0.05
     → Negative
 
 Between -0.05 and 0.05
     → Neutral
 ```
 
-The sentiment results are then processed using Pandas to calculate the distribution of sentiment across the dataset.
+The sentiment results are processed using Pandas to calculate the distribution of feedback across the three categories.
 
-Matplotlib is used to visualize the results, while Streamlit provides the interactive dashboard.
+### AI-Assisted Responses
+
+Feedy uses the Google Gemini API to generate responses to user questions about the analysed feedback.
+
+The assistant receives relevant dataset context and sentiment information to help generate useful, feedback-related responses.
 
 ---
 
 ## What I Learned
 
-This project helped me develop practical experience with:
+This project provided practical experience with:
 
-- Sentiment analysis
-- Text classification
-- Data processing with Pandas
-- Data visualization
-- Building interactive Streamlit applications
-- Working with CSV datasets
-- Designing modular Python applications
-- Generating insights from data
-- AI-assisted analysis
-- Creating recommendations from identified patterns
-- Structuring and documenting an individual software project
+- Sentiment analysis and text classification.
+- Data processing using Pandas.
+- Data visualisation.
+- Building interactive Streamlit applications.
+- Working with CSV datasets.
+- Integrating generative AI through an API.
+- Prompt engineering and generating context-aware AI responses.
+- Generating insights and recommendations from data.
+- Designing modular Python applications.
+- Managing API keys and application secrets.
+- Deploying applications using Streamlit Community Cloud.
+- Improving user experience through custom themes and interface styling.
 
-The project also strengthened my understanding of how AI can be combined with traditional data analysis techniques to turn unstructured text into useful information.
+The project strengthened my understanding of how traditional data analysis techniques can be combined with generative AI to turn unstructured text into useful information.
 
 ---
 
 ## Limitations
 
-FeedbackLens is designed as a learning and portfolio project.
+FeedbackLens AI is a learning and portfolio project. Some limitations include:
 
-Some limitations include:
-
-- VADER is a lexicon-based sentiment analysis tool and may not understand every context or nuance.
-- The descriptive term analysis currently uses a predefined vocabulary rather than advanced linguistic or POS-tagging techniques.
+- VADER is a lexicon-based sentiment analysis tool and may not understand every context, sarcasm or linguistic nuance.
+- Descriptive term analysis currently uses a predefined vocabulary rather than advanced linguistic or POS-tagging techniques.
 - Recommendations are based on predefined rules and identified feedback patterns.
-- The application does not currently store historical datasets or user accounts.
+- Feedy's responses depend on the quality of the supplied dataset and the Gemini API.
+- The application does not currently provide persistent user accounts or historical dataset storage.
 
 These limitations provide opportunities for future improvements.
 
@@ -381,27 +287,27 @@ These limitations provide opportunities for future improvements.
 
 ## Future Improvements
 
-Possible future improvements include:
+Potential future enhancements include:
 
-- Add more advanced NLP models
-- Add keyword frequency visualizations
-- Add sentiment trends across dates
-- Add filtering by category or feedback type
-- Add exportable PDF reports
-- Add AI-generated summaries using an LLM
-- Add more advanced recommendation logic
-- Add historical dataset comparison
-- Add database storage
-- Improve text classification using machine learning
-- Deploy the application online
+- Introduce more advanced NLP models.
+- Add keyword frequency visualisations.
+- Add sentiment trends across dates.
+- Support filtering by category or feedback type.
+- Expand downloadable PDF reporting.
+- Improve AI-generated summaries and recommendations.
+- Introduce more advanced recommendation logic.
+- Add historical dataset comparisons.
+- Implement database storage.
+- Improve classification using machine learning.
+- Expand Feedy's ability to compare datasets.
 
 ---
 
 ## Project Outcome
 
-FeedbackLens AI demonstrates how sentiment analysis and data visualization can be combined into a practical application for understanding learner feedback.
+FeedbackLens AI demonstrates how sentiment analysis, data visualisation and generative AI can be combined into a practical application for understanding learner and training feedback.
 
-Rather than only showing whether feedback is positive or negative, the application attempts to identify **what users are saying, what areas may require attention, and what actions could improve the experience**.
+Rather than simply identifying whether feedback is positive or negative, the application aims to help users understand **what people are saying, which areas require attention and what actions could improve the overall experience.**
 
 ---
 
@@ -417,6 +323,8 @@ AI Engineer Intern
 
 ## Project Status
 
-**Status:** In Development
+**Status: In Development**
 
-The core sentiment analysis, dashboard, insights, recommendations, CSV upload, downloadable results, and theme functionality have been implemented. Further improvements will be added as the project develops.
+The application currently includes sentiment analysis, feedback uploads, dashboard visualisations, insights, recommendations, feedback exploration, CSV downloads, selectable themes and the Feedy AI assistant.
+
+Further improvements and refinements are planned as the project continues to develop.
